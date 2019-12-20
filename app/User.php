@@ -36,4 +36,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /*
+    * current words the student is working on
+    */
+
+    public function words()
+    {
+        return $this->belongsToMany('App\Word', 'user_word', 'user_id', 'word_id');
+    }
+
+    public function words()
+    {
+        return $this->belongsToMany('App\Permission')
+    }
 }
