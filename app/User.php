@@ -46,8 +46,16 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Word', 'user_word', 'user_id', 'word_id');
     }
 
-    public function words()
+    public function permissions()
     {
-        return $this->belongsToMany('App\Permission')
+        return $this->belongsToMany('App\Permission');
+    }
+
+    public function children(){
+        return $this->belongsToMany('App\User', 'parent_student', 'parent_id', 'student_id');
+    }
+
+    public function parents(){
+        return $this->belongsToMany('App\User', 'parent_student', 'student_id', 'parent_id');
     }
 }
