@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateWordRequest extends FormRequest
+class CreateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,8 @@ class CreateWordRequest extends FormRequest
     public function rules()
     {
         return [
-            'word'=>'required',
-            'definition'=>'required',
-            'pronunciation'=>'required',
-            'usage'=>'required',
-            'lexile_level'=>'required'
+            'email' => 'required|unique:users|email',
+            'password' => 'required|string|min:6'
         ];
     }
 

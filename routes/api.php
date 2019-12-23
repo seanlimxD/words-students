@@ -16,3 +16,15 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::resource('words', 'WordController', ['except' => ['create', 'edit']]);
+Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
+Route::resource('users.words', 'UserWordController', ['except' => ['create', 'edit']]);
+Route::post('users/{user}/newWord', 'UserWordController@newWord');
+Route::post('users/{user}/words/{word}/addView', 'UserWordController@addView');
+Route::post('users/{user}/words/{word}/toggleActive', 'UserWordController@toggleActive');
+Route::resource('parents.students', 'ParentStudentController', ['except' => ['create', 'edit', 'update']]);
+Route::resource('courses', 'CourseController', ['except' => ['create', 'edit']]);
+Route::resource('permissions', 'PermissionController', ['except' => ['create', 'edit']]);
+Route::resource('courses.users', 'CourseUserController', ['except' => ['create', 'edit', 'update']]);
+Route::post('courses/{course}/users/{user}/toggleTeacher', 'CourseUserController@toggleTeacher');

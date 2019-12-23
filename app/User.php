@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'lexile_level',
     ];
 
     /**
@@ -43,7 +43,7 @@ class User extends Authenticatable
 
     public function words()
     {
-        return $this->belongsToMany('App\Word', 'user_word', 'user_id', 'word_id');
+        return $this->belongsToMany('App\Word', 'users_words', 'user_id', 'word_id')->withTimestamps();
     }
 
     public function permissions()
@@ -52,10 +52,14 @@ class User extends Authenticatable
     }
 
     public function children(){
-        return $this->belongsToMany('App\User', 'parent_student', 'parent_id', 'student_id');
+        return $this->belongsToMany('App\User', 'parents_students', 'parent_id', 'student_id');
     }
 
     public function parents(){
-        return $this->belongsToMany('App\User', 'parent_student', 'student_id', 'parent_id');
+        return $this->belongsToMany('App\User', 'parents_students', 'parent_id', 'student_id');
+    }
+
+    public function courses(){
+        return $this->belongsToMany("App\Course", 'courses_users', 'user_id', 'course_id')->withTimestamps();
     }
 }

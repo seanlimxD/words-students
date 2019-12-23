@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Word extends Model
 {
-    protected $fillable = ['word', 'definition', 'pronunciation', 'usage', 'lexile_level']
+    protected $fillable = ['word', 'definition', 'pronunciation', 'usage', 'lexile_level'];
 
 
     /*
@@ -14,6 +14,6 @@ class Word extends Model
     */
     public function users()
     {
-        return $this->belongsToMany('App\User', 'user_word', 'user_id', 'word_id');
+        return $this->belongsToMany('App\User', 'users_words', 'word_id', 'user_id')->withTimestamps();
     }
 }

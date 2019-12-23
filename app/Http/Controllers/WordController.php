@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Word;
+use App\User;
 use App\Http\Requests\CreateWordRequest;
 
 use Auth;
@@ -31,11 +32,14 @@ class WordController extends Controller
      */
     public function store(CreateWordRequest $request)
     {
-        $values = $request->all();
+    	// if ($user->permissions()::whereId('4')) {
+		$values = $request->all();
 
         $word = Word::create($values);
 
         return response()->json(['message'=>'Word is now added','code'=>201, 'word' => $word], 201);
+    	// }
+        // return response()->json(['message'=>'You do not have the permissions to create new words', 'code'=>403],403);
     }
 
      /**
