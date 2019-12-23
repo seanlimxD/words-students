@@ -11,6 +11,6 @@ class Permission extends Model
 	protected $fillable = ['permission', 'description'];
 
 	public function users(){
-		return $this->belongsToMany('App/User');
+		return $this->belongsToMany('App\User', 'permissions_users')->withTimestamps();
 	}
 }

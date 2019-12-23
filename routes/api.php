@@ -28,3 +28,4 @@ Route::resource('courses', 'CourseController', ['except' => ['create', 'edit']])
 Route::resource('permissions', 'PermissionController', ['except' => ['create', 'edit']]);
 Route::resource('courses.users', 'CourseUserController', ['except' => ['create', 'edit', 'update']]);
 Route::post('courses/{course}/users/{user}/toggleTeacher', 'CourseUserController@toggleTeacher');
+Route::resource('permissions.users', 'PermissionUserController', ['except' => ['create', 'edit', 'update']]);
