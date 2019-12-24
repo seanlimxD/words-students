@@ -60,6 +60,10 @@ class User extends Authenticatable
     }
 
     public function courses(){
-        return $this->belongsToMany("App\Course", 'courses_users', 'user_id', 'course_id')->withTimestamps();
+        return $this->belongsToMany("App\Course", 'courses_users', 'user_id', 'course_id')->withPivot('teacher')->withTimestamps();
+    }
+
+    public function ownedCourses(){
+        return $this->hasMany('App\Course');
     }
 }

@@ -32,14 +32,14 @@ class WordController extends Controller
      */
     public function store(CreateWordRequest $request)
     {
-    	// if ($user->permissions()::whereId('4')) {
-		$values = $request->all();
+    	if (Auth::user()->permissions()->where('permission_id','4')->exists()) {
+			$values = $request->all();
 
-        $word = Word::create($values);
+	        $word = Word::create($values);
 
-        return response()->json(['message'=>'Word is now added','code'=>201, 'word' => $word], 201);
-    	// }
-        // return response()->json(['message'=>'You do not have the permissions to create new words', 'code'=>403],403);
+	        return response()->json(['message'=>'Word is now added','code'=>201, 'word' => $word], 201);
+    	}
+        return response()->json(['message'=>'You do not have the permissions to create new words', 'code'=>403],403);
     }
 
      /**
@@ -62,9 +62,13 @@ class WordController extends Controller
      */
     public function update(Request $request, Word $word)
     {
-        $word->fill($request->all())->save();
+    	if (Auth::user()->permissions()->where('permission_id','5')->exists()) {
+			$word->fill($request->all())->save();
 
-        return response()->json(['message'=>'Word updated','word' => $word, 201], 201);
+        	return response()->json(['message'=>'Word updated','word' => $word, 201], 201);
+		}
+        return response()->json(['message'=>'You do not have the permissions to edit words', 'code'=>403],403);
+        
     }
 
      /**
@@ -75,7 +79,10 @@ class WordController extends Controller
      */
     public function destroy(Word $word)
     {
-        $word->delete();
-        return response()->json(['message'=>'This word has been deleted','code'=>201], 201);
+    	if (Auth::user()->permissions()->where('permission_id','5')->exists()) {
+    		$word->delete();
+        	return response()->json(['message'=>'This word has been deleted','code'=>201], 201);
+		}
+        return response()->json(['message'=>'You do not have the permissions delete words', 'code'=>403],403);
     }
 }

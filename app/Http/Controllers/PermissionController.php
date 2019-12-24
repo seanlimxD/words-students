@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Permission;
 use App\Http\Requests\CreatePermissionRequest;
 
+use Auth;
+
 class PermissionController extends Controller
 {
     /**
@@ -26,12 +28,12 @@ class PermissionController extends Controller
      */
     public function store(CreatePermissionRequest $request)
     {
-    	// if ($user->permissions()::whereId('3')) {
-        $permission = Permission::create($request->all());
+    	if (Auth::user()->permissions()->where('permission_id','6')->exists()) {
+	        $permission = Permission::create($request->all());
 
-        return response()->json(['message'=>'Permission has been created','code'=>201, 'permission' => $permission], 201);
-    	// }
-        // return response()->json(['message'=>'You do not have the permissions to create new users', 'code'=>403],403);
+	        return response()->json(['message'=>'Permission has been created','code'=>201, 'permission' => $permission], 201);
+		}
+        return response()->json(['message'=>'You do not have the permissions to create new permissions', 'code'=>403],403);
     }
 
      /**
@@ -54,9 +56,11 @@ class PermissionController extends Controller
      */
     public function update(Request $request, Permission $permission)
     {
-        $permission->fill($request->all())->save();
-
-        return response()->json(['message'=>'Permission updated','permission' => $permission, 201], 201);
+    	if (Auth::user()->permissions()->where('permission_id','7')->exists()) {
+	        $permission->fill($request->all())->save();
+	        return response()->json(['message'=>'Permission updated','permission' => $permission, 201], 201);
+		}
+        return response()->json(['message'=>'You do not have the permissions to edit permissions', 'code'=>403],403);
     }
 
      /**
@@ -67,7 +71,10 @@ class PermissionController extends Controller
      */
     public function destroy(Permission $permission)
     {
-        $permission->delete();
-        return response()->json(['message'=>'This permission has been deleted','code'=>201], 201);
+    	if (Auth::user()->permissions()->where('permission_id','7')->exists()) {
+        	$permission->delete();
+        	return response()->json(['message'=>'This permission has been deleted','code'=>201], 201);
+		}
+        return response()->json(['message'=>'You do not have the permissions to delete permissions', 'code'=>403],403);
     }
 }

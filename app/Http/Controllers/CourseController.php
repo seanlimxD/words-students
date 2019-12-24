@@ -28,18 +28,18 @@ class CourseController extends Controller
      */
     public function store(CreateCourseRequest $request)
     {
-    	// if ($user->permissions()::whereId('3')) {
-        $course = new Course();
+    	if (Auth::user()->permissions()->where('permission_id','9')->exists()) {
+    		$course = new Course();
 
-        $course->fill($request->all());
+	        $course->fill($request->all());
 
-        $course->user_id = 1;
+	        $course->user_id = 1;
 
-        $course->save();
+	        $course->save();
 
-        return response()->json(['message'=>'Course has been created','code'=>201, 'course' => $course], 201);
-    	// }
-        // return response()->json(['message'=>'You do not have the permissions to create new users', 'code'=>403],403);
+	        return response()->json(['message'=>'Course has been created','code'=>201, 'course' => $course], 201);
+		}
+        return response()->json(['message'=>'You do not have the permissions to create courses', 'code'=>403],403);
     }
 
      /**
@@ -62,9 +62,12 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        $course->fill($request->all())->save();
+    	if (Auth::user()->permissions()->where('permission_id','10')->exists() || $course->user_id == Auth::user()->id || Auth::user()->courses()->where('course_id', $course)->first()->pivot->teacher) {
+	        $course->fill($request->all())->save();
 
-        return response()->json(['message'=>'Course updated','course' => $course, 201], 201);
+	        return response()->json(['message'=>'Course updated','course' => $course, 201], 201);
+		}
+        return response()->json(['message'=>'You do not have the permissions to edit courses', 'code'=>403],403);
     }
 
      /**
@@ -75,7 +78,10 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        $course->delete();
-        return response()->json(['message'=>'This course has been deleted','code'=>201], 201);
+    	if (Auth::user()->permissions()->where('permission_id','10')->exists()|| $course->user_id == Auth::user()->id) {
+	        $course->delete();
+	        return response()->json(['message'=>'This course has been deleted','code'=>201], 201);
+		}
+        return response()->json(['message'=>'You do not have the permissions to delete courses', 'code'=>403],403);
     }
 }

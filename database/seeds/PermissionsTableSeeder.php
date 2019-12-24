@@ -36,5 +36,35 @@ class PermissionsTableSeeder extends Seeder
             'permission' => 'edit_words',
             'description' => 'Edit/Delete words'
         ]);
+
+        Permission::create([
+            'permission' => 'create_permissions',
+            'description' => 'Create new Permissions'
+        ]);
+
+        Permission::create([
+            'permission' => 'edit_permissions',
+            'description' => 'Edit/Delete Permissions'
+        ]);
+
+        Permission::create([
+            'permission' => 'grant_permissions',
+            'description' => 'Grant Permissions to Users'
+        ]);
+
+        Permission::create([
+            'permission' => 'create_courses',
+            'description' => 'Create new Courses'
+        ]);
+
+        Permission::create([
+            'permission' => 'edit_courses',
+            'description' => 'Edit/Delete Courses'
+        ]);
+
+        Permission::create([
+            'permission' => 'view_courses',
+            'description' => 'View Course Information'
+        ]);
     }
 }

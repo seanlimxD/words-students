@@ -30,17 +30,17 @@ class PermissionUserController extends Controller
      */
     public function store(Request $request, Permission $permission)
     {
-    	// if ($user->permissions()::whereId('3')) {
-		foreach ($request->all() as $user_id){
-            if ($user=User::find($user_id)){
-                $user->permissions()->sync($permission->id, false);
-            } else {
-                response()->json(['message'=>'Error in user chosen'], 401);
-            } 
-        }
-        return response()->json(['message' => 'Users(s) correctly added to permission', 'users added'=>$permission->users,'code'=>201]);
-    	// }
-        // return response()->json(['message'=>'You do not have the permissions to create new users', 'code'=>403],403);
+    	if (Auth::user()->permissions()->where('permission_id','8')->exists()) {
+    		foreach ($request->all() as $user_id){
+	            if ($user=User::find($user_id)){
+	                $user->permissions()->sync($permission->id, false);
+	            } else {
+	                response()->json(['message'=>'Error in user chosen'], 401);
+	            } 
+	        }
+	        return response()->json(['message' => 'Users(s) correctly added to permission', 'users added'=>$permission->users,'code'=>201]);
+		}
+        return response()->json(['message'=>'You do not have the permissions to grant permissions.', 'code'=>403],403);	
     }
 
      /**
@@ -69,11 +69,14 @@ class PermissionUserController extends Controller
      */
     public function destroy(Permission $permission, User $user)
     {
-    	$users = $permission->users->find($user->id);
-        if (!$users) {
-            return response()->json(['message' => 'This user does not have this permission.', 'code'=>404], 404);
-        }
-        $permission->users()->detach($user->id);
-        return response()->json(['message'=>'This user no longer has this permission.', 'users'=>$permission->users()->get(), 'code'=>201], 201);
+    	if (Auth::user()->permissions()->where('permission_id','8')->exists()) {
+    		$users = $permission->users->find($user->id);
+	        if (!$users) {
+	            return response()->json(['message' => 'This user does not have this permission.', 'code'=>404], 404);
+	        }
+	        $permission->users()->detach($user->id);
+	        return response()->json(['message'=>'This user no longer has this permission.', 'users'=>$permission->users()->get(), 'code'=>201], 201);
+		}
+        return response()->json(['message'=>'You do not have the permissions to revoke permissions.', 'code'=>403],403);
     }
 }

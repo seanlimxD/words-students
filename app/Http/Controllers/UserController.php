@@ -20,7 +20,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        return response()-> json(['message' => 'Request executed successfully', 'users'=>User::all()],200);
+    	if (Auth::user()->permissions()->where('permission_id','1')->exists()) {
+        	return response()-> json(['message' => 'Request executed successfully', 'users'=>User::all()],200);
+		}
+        return response()->json(['message'=>'You do not have the permissions to display users.', 'code'=>403],403);
     }
 
      /**
@@ -30,15 +33,15 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(CreateUserRequest $request)
-    {
-    	// if ($user->permissions()::whereId('3')) {
-		$values = $request->all();
-        $values['password'] = bcrypt($request->password);
-        $user = User::create($values);
+    {    	
+    	if (Auth::user()->permissions()->where('permission_id','3')->exists()) {
+			$values = $request->all();
+	        $values['password'] = bcrypt($request->password);
+	        $user = User::create($values);
 
-        return response()->json(['message'=>'User has been registered','code'=>201, 'user' => $user], 201);
-    	// }
-        // return response()->json(['message'=>'You do not have the permissions to create new users', 'code'=>403],403);
+	        return response()->json(['message'=>'User has been registered','code'=>201, 'user' => $user], 201);
+		}
+        return response()->json(['message'=>'You do not have the permissions to create users.', 'code'=>403],403);
     }
 
      /**
@@ -49,7 +52,10 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return response()->json(['message' =>'Successful retrieval of user.', 'user'=>$user, 'code'=>201], 201);
+    	if (Auth::user()->permissions()->where('permission_id','1')->exists() || Auth::user()->children()->where('student_id', $user->id)->exists() || Auth::user() == $user) {	
+        	return response()->json(['message' =>'Successful retrieval of user.', 'user'=>$user, 'code'=>201], 201);
+        }
+        return response()->json(['message'=>'You do not have the permissions to view this users information.', 'code'=>403],403);
     }
 
      /**
@@ -61,11 +67,14 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-		$values = $request;
-        $values['password'] = bcrypt($request->password);
-        $user->fill($values->all())->save();
+    	if (Auth::user()->permissions()->where('permission_id','2')->exists() || Auth::user()->children()->where('student_id', $user->id)->exists() || Auth::user() == $user) {	
+			$values = $request;
+	        $values['password'] = bcrypt($request->password);
+	        $user->fill($values->all())->save();
 
-        return response()->json(['message'=>'User updated','user' => $user, 201], 201);
+	        return response()->json(['message'=>'User updated','user' => $user, 201], 201);
+		}
+        return response()->json(['message'=>'You do not have the permissions to edit this users information.', 'code'=>403],403);
     }
 
      /**
@@ -75,8 +84,15 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user)
-    {
-        $user->delete();
-        return response()->json(['message'=>'This user has been deleted','code'=>201], 201);
+    {	
+    	if (Auth::user()->permissions()->where('permission_id','2')->exists() || Auth::user()->children()->where('student_id', $user->id)->exists() || Auth::user() == $user) {
+
+	    	if (count($user->ownedCourses)>0) {
+	    		return response()->json(['message'=>'User owns existing courses and cannot be deleted.'], 400);
+	    	}
+	        $user->delete();
+	        return response()->json(['message'=>'This user has been deleted','code'=>201], 201);
+		}
+        return response()->json(['message'=>'You do not have the permissions to delete this user.', 'code'=>403],403);
     }
 }
