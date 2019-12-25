@@ -8,6 +8,8 @@ use App\Permission;
 use App\Permission_User;
 use App\User;
 
+use Auth;
+
 class PermissionUserController extends Controller
 {
     /**

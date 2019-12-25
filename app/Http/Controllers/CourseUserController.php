@@ -8,6 +8,8 @@ use App\Course;
 use App\User;
 use App\Course_User;
 
+use Auth;
+
 class CourseUserController extends Controller
 {
     /**

@@ -17,6 +17,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// This endpoint does not need authentication.
+Route::get('/public', function (Request $request) {
+    return response()->json(['message' => 'Hello from a public endpoint!']);
+});
+
+// These endpoints require a valid access token.
+Route::middleware(['jwt'])->group(function () {
+    Route::get('/private', function (Request $request) {
+        return response()->json(['message' => 'Hello from a private endpoint!']);
+    });
+});
+
 Route::resource('words', 'WordController', ['except' => ['create', 'edit']]);
 Route::resource('users', 'UserController', ['except' => ['create', 'edit']]);
 Route::resource('users.words', 'UserWordController', ['except' => ['create', 'edit']]);

@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 
 use App\User;
 
+use Auth;
+
 class ParentStudentController extends Controller
 {
     /**

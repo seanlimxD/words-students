@@ -63,7 +63,7 @@ return array(
     |   This is used to verify the decoded tokens when using RS256
     |
     */
-     'authorized_issuers'  => [ 'https://allgiftedllc.au.auth0.com/' ]
+     'authorized_issuers'  => [ 'https://allgiftedllc.au.auth0.com/' ],
     /*
     |--------------------------------------------------------------------------
     |   The authorized token issuers
@@ -71,6 +71,5 @@ return array(
     |   This is used to verify the decoded tokens when using RS256
     |
     */
-    // 'api_identifier'  => [ ],
-
+    //'api_identifier' => 'https://words-students.loc/api',
 );

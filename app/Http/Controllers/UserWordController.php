@@ -9,6 +9,8 @@ use App\User;
 use App\User_Word;
 use App\Word;
 
+use Auth;
+
 class UserWordController extends Controller
 {
      /**
