@@ -71,5 +71,7 @@ return array(
     |   This is used to verify the decoded tokens when using RS256
     |
     */
-    //'api_identifier' => 'https://words-students.loc/api',
+    'api_identifier' => 'https://allgiftedllc.au.auth0.com/api/v2/',
+
+    'supported_algs' => [ 'RS256' ],
 );

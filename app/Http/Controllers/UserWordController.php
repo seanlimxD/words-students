@@ -22,7 +22,7 @@ class UserWordController extends Controller
      {
      	if (Auth::user()->permissions()->where('permission_id','1')->exists() || Auth::user()->children()->where('student_id', $user->id)->exists() || Auth::user() == $user) {
      		$words = $user->words;
-     		return response()-> json(['message' => 'Request executed successfully', 'words'=>$words],200);-
+     		return response()-> json(['message' => 'Request executed successfully', 'words'=>$words],200);
 		}
 		return response()->json(['message'=>'You do not have the permissions to view this users information.', 'code'=>403],403);
      }
